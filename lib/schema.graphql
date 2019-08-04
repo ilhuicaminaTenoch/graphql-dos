@@ -8,5 +8,8 @@ type Course{
 
 type Query {
     "Devuelve todos los cursos"
-    getCourse: [Course]
+    getCourses: [Course],
+    "Devuelve un curso"
+    getCourse(id: ID!): Course
+
 }

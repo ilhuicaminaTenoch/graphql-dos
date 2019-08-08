@@ -15,7 +15,9 @@
   "dependencies": {
     "express": "^4.17.1",
     "express-graphql": "^0.8.0",
-    "graphql": "^14.4.1"
+    "graphql": "^14.4.1",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.4"
   },
   "devDependencies": {
     "nodemon": "^1.19.1",

@@ -1,6 +1,6 @@
 'use strict'
 
-require('dotenv').config();
+//require('dotenv').config();
 
 const { buildSchema } = require('graphql')
 const express = require('express')

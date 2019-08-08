@@ -1,15 +1,10 @@
-type Course{
-    _id: ID
+type EnVivo{
     title: String
-    teacher: String
-    descripcion: String
-    topic: String
+    description: String
+    canonicalUri:String
+    
 }
-
 type Query {
-    "Devuelve todos los cursos"
-    getCourses: [Course],
-    "Devuelve un curso"
-    getCourse(id: ID!): Course
-
+    "Devuelve todos los videos en vivo"
+    getEnVivo(uid: String, pagina: String, ui: String): [EnVivo]
 }

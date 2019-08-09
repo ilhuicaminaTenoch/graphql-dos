@@ -46,13 +46,13 @@ class EnVivo {
     static items(datos){
         const nuevoArreglo = []
         datos.items.forEach(function(valor,index) {
-            const imagen = Utils.imagen(valor)
+            let imagen = Utils.imagen(valor)
             const arreglo = {
                 title: valor['title'],
                 description: valor['description'],
                 canonicalUri: valor['canonicalUri'],
-                // duration: valor['duration'],
-                // imagen: imagen
+                duration: valor['duration'],
+                imagen: imagen,
             }
             nuevoArreglo.push(arreglo)
         })

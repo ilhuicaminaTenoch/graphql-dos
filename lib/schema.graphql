@@ -1,7 +1,9 @@
 type EnVivo{
     title: String
     description: String
-    canonicalUri:String
+    canonicalUri:String,
+    duration: String,
+    imagen: String,
     
 }
 type Query {

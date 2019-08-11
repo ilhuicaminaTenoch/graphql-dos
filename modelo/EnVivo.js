@@ -2,11 +2,12 @@
 
 const requestPromise = require('request-promise')
 const Utils = require('./Utils')
+const Elemento = require('./TipoElemento')
 class EnVivo {
     static videosMcp(datosComponente) {
         const arrayVideos = [];
         datosComponente.items.forEach(function (valor, index) {
-            if (valor['promoType'] == 'clip' || valor['promoType'] == 'episode') {
+            if (valor['promoType'] === 'clip' || valor['promoType'] === 'episode') {
                 const ids = {
                     id: valor['player']['videoId']
                 }
@@ -32,10 +33,10 @@ class EnVivo {
 
     static programas(datosComponente, datosHub) {
         const programas = [];
-        datosComponente.items.forEach(function (valor, index) {
-            switch (valor['promoType']) {
-                case 'clip':
-                    programas.push(TypeElements.clips(valor, datosHub));
+        datosComponente.items.forEach(function (nota, indice) {
+            switch (nota['promoType']) {
+                case 'show':
+                    programas.push(Elemento.show());
                     break;
 
             }
@@ -43,21 +44,6 @@ class EnVivo {
         return programas;
     }
 
-    static items(datos){
-        const nuevoArreglo = []
-        datos.items.forEach(function(valor,index) {
-            let imagen = Utils.imagen(valor)
-            const arreglo = {
-                title: valor['title'],
-                description: valor['description'],
-                canonicalUri: valor['canonicalUri'],
-                duration: valor['duration'],
-                imagen: imagen,
-            }
-            nuevoArreglo.push(arreglo)
-        })
 
-        return nuevoArreglo
-    }
 }
 module.exports = EnVivo

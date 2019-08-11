@@ -2,7 +2,7 @@ type EnVivo{
     title: String
     description: String
     canonicalUri:String,
-    duration: String,
+    publishDate: String,
     imagen: String,
     
 }

@@ -1,5 +1,7 @@
 'use strick'
 
+
+
 class Utils {
     static imagen(nota){
         let imagen = ''
@@ -17,6 +19,22 @@ class Utils {
            
        }
         return imagen
+    }
+
+    static domain(ui){
+        let domainUi = 'www.tudn.mx'
+        switch (ui) {
+            case 'tudn':
+                domainUi = 'www.tudn.mx'
+                break;
+
+            case 'las-estrellas':
+                domainUi = 'www.lasestrellas.tv'
+
+            default:
+                domainUi
+        }
+        return domainUi
     }
 }
 

@@ -1,0 +1,26 @@
+type EnVivo{
+    id: String
+    name: String
+    description:String,
+    pub_date: String,
+    start_time: String,
+    end_time: String,
+    is_live: Boolean,
+    image_assets: [Imagen],
+    show_category_external_id: String,
+    channel_id: String,
+    channel_name: String,
+    override_url: String,
+    stream_state: String,
+    type: String
+
+    
+}
+type Query {
+    "Devuelve todos los videos en vivo"
+    getEnVivo(uid: String, pagina: String, ui: String): [EnVivo]
+}
+
+type Imagen{
+    image_base: String
+}

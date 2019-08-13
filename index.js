@@ -15,11 +15,10 @@ const port = process.env.port || 3000
 // Definiendo el esquema
 const shema = buildSchema(
     readFileSync(
-        join(__dirname, 'lib', 'schema.graphql'),
+        join(__dirname, 'schemas', 'enVivo.graphql'),
         'utf-8'
     )
 )
-
 app.use('/api', gqlMiddleware({
   schema: shema,
   rootValue: resolvers,

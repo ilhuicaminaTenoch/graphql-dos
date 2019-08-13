@@ -1,7 +1,6 @@
 'use strick'
 
 const requestPromise = require('request-promise')
-const Utils = require('./Utils')
 const Elemento = require('./TipoElemento')
 class EnVivo {
     static videosMcp(datosComponente) {
@@ -31,16 +30,19 @@ class EnVivo {
         return API_REQUEST;
     }
 
-    static programas(datosComponente, datosHub) {
+    static programas(datosComponente, ui) {
         const programas = [];
         datosComponente.items.forEach(function (nota, indice) {
             switch (nota['promoType']) {
                 case 'show':
-                    programas.push(Elemento.show());
+                    programas.push(Elemento.show(nota, ui))
                     break;
+                case 'clip':
+                    // programas.push(Elemento.clip(nota,ui))
+                    break
 
             }
-        });
+        })
         return programas;
     }
 

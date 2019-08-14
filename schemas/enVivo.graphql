@@ -12,6 +12,7 @@ type EnVivo{
     channel_name: String,
     override_url: String,
     stream_state: String,
+    url_public: String
     type: String
 
     

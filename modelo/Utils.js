@@ -94,6 +94,9 @@ class Utils {
         return lastsegment
     }
 
+    static transformDate(fecha){
+        
+    }
 }
 
 module.exports = Utils

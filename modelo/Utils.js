@@ -42,17 +42,19 @@ class Utils {
         return src
     }
     static consultaHub(datosIdvideos) {
-        const ids = encodeURI(datosIdvideos.join(','));
-        const size = datosIdvideos.length;
-        const options = {
-            uri: 'http://video-hub-prod-tvss-1882082018.us-east-1.elb.amazonaws.com/api/v3/video-auth/url-signature-tokens?mcpids=' + ids + '&size=' + size
-        };
+        if (datosIdvideos.length > 0) {
+            const ids = encodeURI(datosIdvideos.join(','));
+            const size = datosIdvideos.length;
+            const options = {
+                uri: 'http://video-hub-prod-tvss-1882082018.us-east-1.elb.amazonaws.com/api/v3/video-auth/url-signature-tokens?mcpids=' + ids + '&size=' + size
+            };
 
-        const API_REQUEST = requestPromise(options).then((data) => {
-            const datosHub = JSON.parse(data);
-            return datosHub['data'];
-        });
-        return API_REQUEST;
+            const API_REQUEST = requestPromise(options).then((data) => {
+                const datosHub = JSON.parse(data)
+                return datosHub['data'];
+            });
+            return API_REQUEST;
+        }
     }
     static videosMcp(datosComponente) {
         const arrayVideos = [];
@@ -80,6 +82,16 @@ class Utils {
         let parserUrl = parse(m3u8, true)
         let nuevoToken = parserUrl.set('query', token)
         return nuevoToken.href
+    }
+
+    static formaUrlBroadcasEventShow(url){
+        let parserUrl = parse(url, true)
+        let hostname = parserUrl.set('hostname', '')
+        let query = hostname.set('query','')
+        let cadenaFinal = query.href
+        let array = cadenaFinal.split('/')
+        let lastsegment = array[array.length-1]
+        return lastsegment
     }
 
 }

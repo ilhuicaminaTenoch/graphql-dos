@@ -7,11 +7,11 @@ class EnVivo {
         const programas = [];
         const videosMcp = Utils.videosMcp(datosComponente)
         const consultaHub = Utils.consultaHub(videosMcp)
-        const senales = Utils.epgSenales()
+        const epgSenales = Utils.epgSenales()
         datosComponente.items.forEach(function (nota, indice) {
             switch (nota['promoType']) {
                 case 'show':
-                    //programas.push(Elemento.show(nota, ui))
+                    programas.push(Elemento.show(nota, ui, epgSenales))
                     break;
                 case 'clip':
 

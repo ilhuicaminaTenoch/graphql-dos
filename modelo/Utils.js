@@ -3,6 +3,7 @@
 
 const requestPromise = require('request-promise')
 const parse = require('url-parse')
+const dateFormat = require('dateformat')
 class Utils {
     static imagen(nota){
         let imagen = ''
@@ -94,8 +95,14 @@ class Utils {
         return lastsegment
     }
 
-    static transformDate(fecha){
-        
+    static transformDate(fechaCompleta){
+        // ejemplo:2019:08:25T14:00:00Z
+        const fecha = fechaCompleta.substring(0, 10)
+        const hora = fechaCompleta.substring(11,19)
+        let nuevaFecha = fecha.replace(/:/gi,'-')
+        let dateformat = dateFormat(nuevaFecha+' '+hora, 'yyyy/mm/dd HH:MM:ss')
+        return dateformat;
+
     }
 }
 

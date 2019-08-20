@@ -13,7 +13,8 @@ type EnVivo{
     override_url: String,
     stream_state: String,
     url_public: String
-    type: String
+    type: String,
+    promoType:String
 
     
 }

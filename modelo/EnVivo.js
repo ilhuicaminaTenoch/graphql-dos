@@ -14,13 +14,15 @@ class EnVivo {
                     programas.push(Elemento.show(nota, ui, epgSenales))
                     break;
                 case 'clip':
-
                     programas.push(Elemento.clip(nota,ui, consultaHub))
+                    break
+                case 'BroadcastEvent':
+                    programas.push(Elemento.broadcastEvent(nota, ui, epgSenales))
                     break
 
             }
         })
-        return programas;
+        return programas.filter(Boolean);
     }
 
 

@@ -4,22 +4,53 @@
 const requestPromise = require('request-promise')
 const parse = require('url-parse')
 const dateFormat = require('dateformat')
+const winston = require('winston')
+const fs = require('fs');
+const path = require('path');
+
 class Utils {
     static imagen(nota){
         let imagen = ''
-       //console.log(nota['media']['renditions']['aspect-16x9']['large']['uri'])
-       if(nota.hasOwnProperty('media')){
-           if(nota['media'].hasOwnProperty('renditions')){
-               if(nota['media']['renditions'].hasOwnProperty('aspect-16x9')){
-                    if(nota['media']['renditions']['aspect-16x9'].hasOwnProperty('large')){
-                        imagen = nota['media']['renditions']['aspect-16x9']['large']['uri']
-                
-                    } 
+       if (nota['promoType'] === 'show' || nota['promoType'] === 'clip'){
+           if(nota.hasOwnProperty('media')){
+               if(nota['media'].hasOwnProperty('renditions')){
+                   if(nota['media']['renditions'].hasOwnProperty('aspect-16x9')){
+                       if(nota['media']['renditions']['aspect-16x9'].hasOwnProperty('large')){
+                           imagen = nota['media']['renditions']['aspect-16x9']['large']['uri']
+                       }else{
+                           this.creaLog(
+                               'created-logfile',
+                               'No existe el nodo large',
+                               {uid:nota['uid'], title:nota['title']})
+                       }
+                   }else{
+                       this.creaLog(
+                           'created-logfile',
+                           'No existe el nodo aspect-16x9',
+                           {uid:nota['uid'], title:nota['title']})
+                   }
+               }else{
+                   this.creaLog(
+                       'created-logfile',
+                       'No existe el nodo renditions',
+                       {uid:nota['uid'], title:nota['title']})
                }
-            
+           }else{
+               this.creaLog(
+                   'created-logfile',
+                   'No existe el nodo media',
+                   {uid:nota['uid'], title:nota['title']})
            }
-           
+       }else if(nota['promoType'] === 'BroadcastEvent'){
+           if (nota['playerState'] === 'ON'){
+               imagen = nota['previousImage']['original']['uri']
+           }else if (nota['playerState'] == 'POST') {
+               imagen = nota['postImage']['original']['uri']
+           }else if (nota['playerState'] === 'PRE'){
+                imagen = nota['previousImage']['original']['uri']
+           }
        }
+
         return imagen
     }
     static domain(ui){
@@ -102,6 +133,82 @@ class Utils {
         let nuevaFecha = fecha.replace(/:/gi,'-')
         let dateformat = dateFormat(nuevaFecha+' '+hora, 'yyyy/mm/dd HH:MM:ss')
         return dateformat;
+
+    }
+
+    static dataBroadCastEventShow(host, uri) {
+        let optionsIframe = {uri: `https://${host}/redux${uri}`}
+        let signals = []
+        const peticionUno = requestPromise(optionsIframe).then((data) => {
+            const datosIframe = JSON.parse(data);
+            if (datosIframe['content'][0]['_type'] === 'RichText') {
+                let content = datosIframe['content'][0]['content'][0]
+                let urlIframe = Utils.getSrc(content)
+                let formaUrlBroadcasEventShow = Utils.formaUrlBroadcasEventShow(urlIframe)
+                let optionsBroadcasEventShow = {uri: `https://${host}/redux/${formaUrlBroadcasEventShow}`}
+                const peticionDos = requestPromise(optionsBroadcasEventShow).then((dataBroadcastEventShow) => {
+                    let jsonParser = JSON.parse(dataBroadcastEventShow)
+                    let objeto = {
+                        startDate: jsonParser['startDate'],
+                        endDate: jsonParser['endDate'],
+                        signal: jsonParser['signals'][0]['signal'],
+                        name: jsonParser['signals'][0]['name'],
+                        playerState: jsonParser['playerState']
+                    }
+                    signals.push(objeto)
+                    return signals
+                }).catch(function (err) {
+                    console.error('Error en la peticion dos: '+optionsBroadcasEventShow.uri)
+                    //console.error('Error: '+err)
+
+                })
+                return peticionDos
+            }
+        }).catch(function (err) {
+            console.error('Error en la peticion uno: '+optionsIframe.uri)
+
+        })
+        return peticionUno
+    }
+
+    static dataBroadcastEvent(host, uri){
+        let options = {uri: `https://${host}/redux${uri}`}
+        let signals = []
+        return requestPromise(options).then((data) => {
+            let jsonParser = JSON.parse(data)
+            let objeto = {
+                startDate: jsonParser['startDate'],
+                endDate: jsonParser['endDate'],
+                signal: jsonParser['signals'][0]['signal'],
+                name: jsonParser['signals'][0]['name'],
+                playerState: jsonParser['playerState']
+            }
+            signals.push(objeto)
+            return signals
+        })
+    }
+
+    static creaLog(nameFileLog, mensaje, meta){
+        let nameLog = `${nameFileLog}.log`
+        const filename = path.join(__dirname, 'logs', nameLog);
+        try { fs.unlinkSync(filename); }
+        catch (ex) { }
+
+        const logger = winston.createLogger({
+            transports: [
+                new winston.transports.Console(),
+                new winston.transports.File({filename})
+            ]
+        })
+        logger.log('error', mensaje, meta)
+
+        setTimeout(function () {
+            //
+            // Remove the file, ignoring any errors
+            //
+            try { fs.unlinkSync(filename); }
+            catch (ex) { }
+        }, 1000);
 
     }
 }

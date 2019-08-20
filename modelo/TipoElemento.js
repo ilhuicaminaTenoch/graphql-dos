@@ -2,39 +2,43 @@
 
 const Utils = require('./Utils')
 const dateFormat = require('dateformat');
-const requestPromise = require('request-promise')
-const Url = require('url-parse')
 
 class TipoElemento {
     static show(nota, ui, epSenales) {
-        let host = Utils.domain(ui)
-        return this.dataBroadCastEventShow(host, nota['uri']).then((signals) => {
-            //console.log(signals)
-            return epSenales.then((epg) => {
-                const llave = epg.find(senal => senal.url === signals[0]['signal'])
-                return {
-                    id: nota['uid'],
-                    name: nota['title'],
-                    description: nota['description'],
-                    pub_date: dateFormat(nota['publishDate'], "yyyy-mm-dd HH:MM:ss"),
-                    start_time: Utils.transformDate(signals[0]['startDate']),
-                    end_time: Utils.transformDate(signals[0]['endDate']),
-                    is_live: true,
-                    image_assets: [{
-                        image_base: Utils.imagen(nota)
-                    }],
-                    show_category_external_id: nota['uid'],
-                    channel_id: llave.idCanal,
-                    channel_name: signals[0]['name'],
-                    override_url: signals[0]['signal'],
-                    stream_state: signals[0]['playerState'],
-                    url_public: nota['canonicalUri'],
-                    type: 'live'
-                }
+        if(nota.hasOwnProperty('uri')) {
+            let host = Utils.domain(ui)
+            return Utils.dataBroadCastEventShow(host, nota['uri']).then((signals) => {
+                return epSenales.then((epg) => {
+                    const llave = epg.find(senal => senal.url === signals[0]['signal'])
+                    return {
+                        id: nota['uid'],
+                        name: nota['title'],
+                        description: nota['description'],
+                        pub_date: dateFormat(nota['publishDate'], "yyyy-mm-dd HH:MM:ss"),
+                        start_time: Utils.transformDate(signals[0]['startDate']),
+                        end_time: Utils.transformDate(signals[0]['endDate']),
+                        is_live: true,
+                        image_assets: [{
+                            image_base: Utils.imagen(nota)
+                        }],
+                        show_category_external_id: nota['uid'],
+                        channel_id: llave.idCanal,
+                        channel_name: signals[0]['name'],
+                        override_url: signals[0]['signal'],
+                        stream_state: signals[0]['playerState'],
+                        url_public: nota['canonicalUri'],
+                        type: 'live',
+                        promoType: nota['promoType'],
+                    }
+                })
             })
-        })
+        }else{
+            Utils.creaLog(
+                'created-logfile',
+                'No existe el nodo uri',
+                {uid:nota['uid'], title:nota['title']})
+        }
     }
-
     static clip(nota, ui, datosHub) {
         return datosHub.then((data) => {
             const idVideo = (nota.hasOwnProperty('player')) ? nota['player']['videoId'] : 0
@@ -57,40 +61,42 @@ class TipoElemento {
                 override_url: urlVideo,
                 stream_state: '',
                 url_public: nota['canonicalUri'],
-                type: 'video'
+                type: 'video',
+                promoType: nota['promoType'],
 
             }
         })
     }
-
-    static dataBroadCastEventShow(host, uri) {
-        let optionsIframe = {uri: `https://${host}/redux${uri}`}
-        let signals = []
-        const peticionUno = requestPromise(optionsIframe).then((data) => {
-            const datosIframe = JSON.parse(data);
-            if (datosIframe['content'][0]['_type'] === 'RichText') {
-                let content = datosIframe['content'][0]['content'][0]
-                let urlIframe = Utils.getSrc(content)
-                let formaUrlBroadcasEventShow = Utils.formaUrlBroadcasEventShow(urlIframe)
-                let optionsBroadcasEventShow = {uri: `https://${host}/redux/${formaUrlBroadcasEventShow}`}
-                const peticionDos = requestPromise(optionsBroadcasEventShow).then((dataBroadcastEventShow) => {
-                    let jsonParser = JSON.parse(dataBroadcastEventShow)
-                    let objeto = {
-                        startDate: jsonParser['startDate'],
-                        endDate: jsonParser['endDate'],
-                        signal: jsonParser['signals'][0]['signal'],
-                        name: jsonParser['signals'][0]['name'],
-                        playerState: jsonParser['playerState']
-                    }
-                    signals.push(objeto)
-                    return signals
-                })
-                return peticionDos
-            }
-        });
-        return peticionUno
+    static broadcastEvent(nota, ui, epSenales){
+        let host = Utils.domain(ui)
+        return Utils.dataBroadcastEvent(host, nota['uri']).then((dataBroadcastEvent) => {
+            return  epSenales.then((epg) => {
+                const llave = epg.find(senal => senal.url === dataBroadcastEvent[0]['signal'])
+                return {
+                    id: nota['uid'],
+                    name: nota['title'],
+                    description: nota['description'],
+                    pub_date: dateFormat(nota['publishDate'], "yyyy-mm-dd HH:MM:ss"),
+                    start_time: Utils.transformDate(dataBroadcastEvent[0]['startDate']),
+                    end_time: Utils.transformDate(dataBroadcastEvent[0]['endDate']),
+                    is_live: true,
+                    image_assets: [{
+                        image_base: Utils.imagen(nota)
+                    }],
+                    show_category_external_id: nota['uid'],
+                    channel_id: llave.idCanal,
+                    channel_name: dataBroadcastEvent[0]['name'],
+                    override_url: dataBroadcastEvent[0]['signal'],
+                    stream_state: dataBroadcastEvent[0]['playerState'],
+                    url_public: nota['canonicalUri'],
+                    type: 'live',
+                    promoType: nota['promoType'],
+                }
+            })
+        })
 
     }
+
 
 
 }

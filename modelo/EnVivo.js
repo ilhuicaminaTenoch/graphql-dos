@@ -19,6 +19,8 @@ class EnVivo {
                 case 'BroadcastEvent':
                     programas.push(Elemento.broadcastEvent(nota, ui, epgSenales))
                     break
+                case 'liveBlog':
+                    programas.push(Elemento.liveBlog(nota, ui, epgSenales))
 
             }
         })

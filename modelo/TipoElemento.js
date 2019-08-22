@@ -81,7 +81,7 @@ class TipoElemento {
                     end_time: Utils.transformDate(dataBroadcastEvent[0]['endDate']),
                     is_live: true,
                     image_assets: [{
-                        image_base: Utils.imagen(nota)
+                        image_base: dataBroadcastEvent[0]['imagen']
                     }],
                     show_category_external_id: nota['uid'],
                     channel_id: llave.idCanal,
@@ -95,6 +95,12 @@ class TipoElemento {
             })
         })
 
+    }
+    static liveBlog(nota, ui, epSenales){
+        let host = Utils.domain(ui)
+        return Utils.dataBroadcastEventLiveBlog(host, ui, nota['title']).then((dataLiveBlog) => {
+            console.log(dataLiveBlog)
+        })
     }
 
 

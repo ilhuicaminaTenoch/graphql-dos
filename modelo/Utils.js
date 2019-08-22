@@ -9,51 +9,54 @@ const fs = require('fs');
 const path = require('path');
 
 class Utils {
-    static imagen(nota){
+    static imagen(nota) {
         let imagen = ''
-       if (nota['promoType'] === 'show' || nota['promoType'] === 'clip'){
-           if(nota.hasOwnProperty('media')){
-               if(nota['media'].hasOwnProperty('renditions')){
-                   if(nota['media']['renditions'].hasOwnProperty('aspect-16x9')){
-                       if(nota['media']['renditions']['aspect-16x9'].hasOwnProperty('large')){
-                           imagen = nota['media']['renditions']['aspect-16x9']['large']['uri']
-                       }else{
-                           this.creaLog(
-                               'created-logfile',
-                               'No existe el nodo large',
-                               {uid:nota['uid'], title:nota['title']})
-                       }
-                   }else{
-                       this.creaLog(
-                           'created-logfile',
-                           'No existe el nodo aspect-16x9',
-                           {uid:nota['uid'], title:nota['title']})
-                   }
-               }else{
-                   this.creaLog(
-                       'created-logfile',
-                       'No existe el nodo renditions',
-                       {uid:nota['uid'], title:nota['title']})
-               }
-           }else{
-               this.creaLog(
-                   'created-logfile',
-                   'No existe el nodo media',
-                   {uid:nota['uid'], title:nota['title']})
-           }
-       }else if(nota['promoType'] === 'BroadcastEvent'){
-           if (nota['playerState'] === 'ON'){
-               imagen = nota['previousImage']['original']['uri']
-           }else if (nota['playerState'] == 'POST') {
-               imagen = nota['postImage']['original']['uri']
-           }else if (nota['playerState'] === 'PRE'){
-                imagen = nota['previousImage']['original']['uri']
-           }
-       }
-
+        if (nota['promoType'] === 'show' || nota['promoType'] === 'clip') {
+            if (nota.hasOwnProperty('media')) {
+                if (nota['media'].hasOwnProperty('renditions')) {
+                    if (nota['media']['renditions'].hasOwnProperty('aspect-16x9')) {
+                        if (nota['media']['renditions']['aspect-16x9'].hasOwnProperty('large')) {
+                            imagen = nota['media']['renditions']['aspect-16x9']['large']['uri']
+                        } else {
+                            this.creaLog(
+                                'created-logfile',
+                                'No existe el nodo large',
+                                {uid: nota['uid'], title: nota['title']})
+                        }
+                    } else {
+                        this.creaLog(
+                            'created-logfile',
+                            'No existe el nodo aspect-16x9',
+                            {uid: nota['uid'], title: nota['title']})
+                    }
+                } else {
+                    this.creaLog(
+                        'created-logfile',
+                        'No existe el nodo renditions',
+                        {uid: nota['uid'], title: nota['title']})
+                }
+            } else {
+                this.creaLog(
+                    'created-logfile',
+                    'No existe el nodo media',
+                    {uid: nota['uid'], title: nota['title']})
+            }
+        }
         return imagen
     }
-    static domain(ui){
+
+    static imagenBroadcasEvent(datosBroadcasEvent){
+        let imagen
+        if (datosBroadcasEvent['playerState'] === 'ON') {
+            imagen = datosBroadcasEvent['previousImage']['original']['uri']
+        } else if (datosBroadcasEvent['playerState'] === 'POST') {
+            imagen = datosBroadcasEvent['postImage']['original']['uri']
+        } else if (datosBroadcasEvent['playerState'] === 'PRE') {
+            imagen = datosBroadcasEvent['previousImage']['original']['uri']
+        }
+        return imagen
+    }
+    static domain(ui) {
         let domainUi = 'www.tudn.mx'
         switch (ui) {
             case 'tudn':
@@ -68,11 +71,13 @@ class Utils {
         }
         return domainUi
     }
-    static getSrc(string){
+
+    static getSrc(string) {
         let srcWithQuotes = string.match(/src\=([^\s]*)\s/)[1]
-        let src = srcWithQuotes.substring(1,srcWithQuotes.length - 1)
+        let src = srcWithQuotes.substring(1, srcWithQuotes.length - 1)
         return src
     }
+
     static consultaHub(datosIdvideos) {
         if (datosIdvideos.length > 0) {
             const ids = encodeURI(datosIdvideos.join(','));
@@ -88,18 +93,20 @@ class Utils {
             return API_REQUEST;
         }
     }
+
     static videosMcp(datosComponente) {
         const arrayVideos = [];
         datosComponente.items.forEach(function (valor, index) {
             if (valor['promoType'] === 'clip' || valor['promoType'] === 'episode') {
-                if (valor.hasOwnProperty('player')){
+                if (valor.hasOwnProperty('player')) {
                     arrayVideos.push(valor['player']['videoId']);
                 }
             }
         });
         return arrayVideos;
     }
-    static epgSenales(){
+
+    static epgSenales() {
         const options = {
             uri: 'http://static-feeds.esmas.com/awsfeeds/sports/news/epgSenales.json'
         }
@@ -109,29 +116,30 @@ class Utils {
         });
         return API_REQUEST;
     }
-    static cambiaToken(m3u8){
+
+    static cambiaToken(m3u8) {
         let token = 'hdnea=exp=1568765697~acl=/*~hmac=e52538a535fda93143d02584936413cead0ba98c8fbfa04f0f6ccd3d52bb3035'
         let parserUrl = parse(m3u8, true)
         let nuevoToken = parserUrl.set('query', token)
         return nuevoToken.href
     }
 
-    static formaUrlBroadcasEventShow(url){
+    static formaUrlBroadcasEventShow(url) {
         let parserUrl = parse(url, true)
         let hostname = parserUrl.set('hostname', '')
-        let query = hostname.set('query','')
+        let query = hostname.set('query', '')
         let cadenaFinal = query.href
         let array = cadenaFinal.split('/')
-        let lastsegment = array[array.length-1]
+        let lastsegment = array[array.length - 1]
         return lastsegment
     }
 
-    static transformDate(fechaCompleta){
+    static transformDate(fechaCompleta) {
         // ejemplo:2019:08:25T14:00:00Z
         const fecha = fechaCompleta.substring(0, 10)
-        const hora = fechaCompleta.substring(11,19)
-        let nuevaFecha = fecha.replace(/:/gi,'-')
-        let dateformat = dateFormat(nuevaFecha+' '+hora, 'yyyy/mm/dd HH:MM:ss')
+        const hora = fechaCompleta.substring(11, 19)
+        let nuevaFecha = fecha.replace(/:/gi, '-')
+        let dateformat = dateFormat(nuevaFecha + ' ' + hora, 'yyyy/mm/dd HH:MM:ss')
         return dateformat;
 
     }
@@ -158,41 +166,75 @@ class Utils {
                     signals.push(objeto)
                     return signals
                 }).catch(function (err) {
-                    console.error('Error en la peticion dos: '+optionsBroadcasEventShow.uri)
+                    console.error('Error en la peticion dos: ' + optionsBroadcasEventShow.uri)
                     //console.error('Error: '+err)
 
                 })
                 return peticionDos
             }
         }).catch(function (err) {
-            console.error('Error en la peticion uno: '+optionsIframe.uri)
+            console.error('Error en la peticion uno: ' + optionsIframe.uri)
 
         })
         return peticionUno
     }
 
-    static dataBroadcastEvent(host, uri){
+    static dataBroadcastEvent(host, uri) {
         let options = {uri: `https://${host}/redux${uri}`}
         let signals = []
         return requestPromise(options).then((data) => {
             let jsonParser = JSON.parse(data)
+            const imagen = this.imagenBroadcasEvent(jsonParser)
             let objeto = {
                 startDate: jsonParser['startDate'],
                 endDate: jsonParser['endDate'],
                 signal: jsonParser['signals'][0]['signal'],
                 name: jsonParser['signals'][0]['name'],
-                playerState: jsonParser['playerState']
+                playerState: jsonParser['playerState'],
+                imagen: imagen
             }
             signals.push(objeto)
             return signals
         })
     }
 
-    static creaLog(nameFileLog, mensaje, meta){
+    static dataBroadcastEventLiveBlog(host, uri, titulo){
+        let options = {uri: `https://${host}/redux${uri}`}
+        return requestPromise(options).then((data) => {
+            let jsonParser = JSON.parse(data)
+            if (jsonParser['_type'] === 'LiveBlogPage'){
+                if (jsonParser.hasOwnProperty('lead')){
+                    if(jsonParser['lead']['_type'] === 'Promo'){
+                        let url = `https://${host}/redux${jsonParser['lead']['uri']}`
+                    }else{
+                        this.creaLog(
+                            'created-logfile',
+                            'El contenido lead no es de tipo Promo',
+                            {peticion: options.uri, title: titulo})
+                    }
+                }else{
+                    this.creaLog(
+                        'created-logfile',
+                        'No existe el nodo lead',
+                        {peticion: options.uri, title: titulo})
+                }
+            }else{
+                this.creaLog(
+                    'created-logfile',
+                    '_type no es un liveBlogPage',
+                    {peticion: options.uri, title: titulo})
+            }
+        })
+
+    }
+
+    static creaLog(nameFileLog, mensaje, meta) {
         let nameLog = `${nameFileLog}.log`
         const filename = path.join(__dirname, 'logs', nameLog);
-        try { fs.unlinkSync(filename); }
-        catch (ex) { }
+        try {
+            fs.unlinkSync(filename);
+        } catch (ex) {
+        }
 
         const logger = winston.createLogger({
             transports: [
@@ -206,8 +248,10 @@ class Utils {
             //
             // Remove the file, ignoring any errors
             //
-            try { fs.unlinkSync(filename); }
-            catch (ex) { }
+            try {
+                fs.unlinkSync(filename);
+            } catch (ex) {
+            }
         }, 1000);
 
     }

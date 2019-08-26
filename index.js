@@ -1,6 +1,6 @@
 'use strict'
 
-require('dotenv').config();
+require('dotenv').config()
 
 const { buildSchema } = require('graphql')
 const express = require('express')
@@ -13,7 +13,7 @@ const app = express()
 const port = process.env.port || 3000
 
 // Definiendo el esquema
-const shema = buildSchema(
+const schema = buildSchema(
     readFileSync(
         join(__dirname, 'lib', 'schema.graphql'),
         'utf-8'
@@ -21,7 +21,7 @@ const shema = buildSchema(
 )
 
 app.use('/api', gqlMiddleware({
-  schema: shema,
+  schema: schema,
   rootValue: resolvers,
   graphiql: true
 }))

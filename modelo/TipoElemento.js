@@ -100,6 +100,7 @@ class TipoElemento {
         let host = Utils.domain(ui)
         return Utils.dataBroadcastEventLiveBlog(host, ui, nota['title']).then((dataLiveBlog) => {
             console.log(dataLiveBlog)
+            return []
         })
     }
 

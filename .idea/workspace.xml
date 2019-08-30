@@ -2,11 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0695896a-c4c8-4a7a-852d-23bb899f4d6d" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/lib/queries.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/Cliente.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/Cliente.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modelo/EnVivo.js" beforeDir="false" afterPath="$PROJECT_DIR$/modelo/EnVivo.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/resolvers.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/resolvers.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modelo/TipoElemento.js" beforeDir="false" afterPath="$PROJECT_DIR$/modelo/TipoElemento.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modelo/Utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/modelo/Utils.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/schemas/enVivo.graphql" beforeDir="false" afterPath="$PROJECT_DIR$/schemas/enVivo.graphql" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -86,6 +89,9 @@
       <workItem from="1565544608493" duration="282000" />
       <workItem from="1565545011415" duration="93000" />
       <workItem from="1565801771984" duration="26775000" />
+      <workItem from="1566317114755" duration="5071000" />
+      <workItem from="1566323918587" duration="2438000" />
+      <workItem from="1567179413769" duration="6104000" />
     </task>
     <servers />
   </component>

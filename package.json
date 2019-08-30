@@ -17,6 +17,7 @@
     "express": "^4.17.1",
     "express-graphql": "^0.8.0",
     "graphql": "^14.4.1",
+    "graphql-tools": "^4.0.4",
     "request": "^2.88.0",
     "request-promise": "^4.2.4",
     "url-parse": "^1.4.7",

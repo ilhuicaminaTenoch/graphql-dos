@@ -3,8 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="0695896a-c4c8-4a7a-852d-23bb899f4d6d" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/queries.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/queries.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/resolvers.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/resolvers.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/schemas/enVivo.graphql" beforeDir="false" afterPath="$PROJECT_DIR$/schemas/enVivo.graphql" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -35,6 +35,9 @@
     <exe-path />
     <other-services-enabled>true</other-services-enabled>
     <auto-save>true</auto-save>
+  </component>
+  <component name="PackageJsonUpdateNotifier">
+    <dismissed value="$PROJECT_DIR$/package.json" />
   </component>
   <component name="PhpWorkspaceProjectConfiguration" interpreter_name="PHP 7.1" />
   <component name="ProjectId" id="1PHs4EDNwxQp0LW6SDI4RJcx7aS" />
@@ -87,6 +90,8 @@
       <workItem from="1566317114755" duration="5071000" />
       <workItem from="1566323918587" duration="2438000" />
       <workItem from="1567179413769" duration="6461000" />
+      <workItem from="1567696392172" duration="1287000" />
+      <workItem from="1567705308587" duration="1857000" />
     </task>
     <servers />
   </component>

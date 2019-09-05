@@ -1,6 +1,6 @@
 type Query{
     "Devuelve todos los videos en vivo"
-    getEnVivo(uid: String, pagina: String, ui: String): [EnVivo]
+    programs(uid: String, pagina: String, ui: String): [EnVivo]
 
 }
 
